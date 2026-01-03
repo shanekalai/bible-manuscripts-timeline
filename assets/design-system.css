@@ -1,0 +1,181 @@
+/*
+ * NT Manuscripts Timeline - Design System
+ * Inspired by Flourish.studio aesthetic
+ * Color palette: Warm, scholarly, professional
+ */
+
+:root {
+  /* Primary Color Palette - Warm Parchment & Scholarly */
+  --color-parchment-light: #F5E6D3;
+  --color-parchment: #E8D4B8;
+  --color-parchment-dark: #D4A574;
+  --color-ink: #2C2C2C;
+  --color-ink-light: #4A4A4A;
+
+  /* Background Colors - Light Grayscale Map */
+  --color-bg-primary: #FAFAFA;
+  --color-bg-secondary: #F0F0F0;
+  --color-bg-map: #E5E5E5;
+  --color-bg-overlay: rgba(255, 255, 255, 0.95);
+
+  /* Manuscript Type Colors */
+  --color-papyrus: #C97B3C;       /* Warm terracotta for papyri */
+  --color-uncial: #5B8C5A;        /* Deep sage for uncials */
+  --color-minuscule: #6B7FA8;     /* Slate blue for minuscules */
+
+  /* Text Type Colors (for filtering/legends) */
+  --color-alexandrian: #8B4789;   /* Royal purple */
+  --color-byzantine: #B85450;     /* Byzantine red */
+  --color-western: #7A8E4A;       /* Olive green */
+  --color-caesarean: #5F7B9A;     /* Caesarean blue */
+
+  /* UI Accent Colors */
+  --color-primary: #8B6B47;       /* Muted gold/brown */
+  --color-primary-hover: #6F5438;
+  --color-accent: #A67C52;        /* Warm accent */
+  --color-success: #5B8C5A;
+  --color-warning: #C97B3C;
+  --color-error: #B85450;
+
+  /* Neutral Colors */
+  --color-white: #FFFFFF;
+  --color-gray-100: #F8F8F8;
+  --color-gray-200: #E5E5E5;
+  --color-gray-300: #D1D1D1;
+  --color-gray-400: #A8A8A8;
+  --color-gray-500: #6B6B6B;
+  --color-gray-600: #4A4A4A;
+  --color-gray-700: #2C2C2C;
+
+  /* Typography - Google Fonts */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Crimson Pro', Georgia, serif;  /* For headings - scholarly feel */
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1rem;      /* 16px */
+  --radius-full: 9999px;  /* Fully rounded */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+
+  /* Z-Index Scale */
+  --z-base: 1;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-overlay: 1200;
+  --z-modal: 1300;
+  --z-popover: 1400;
+  --z-tooltip: 1500;
+}
+
+/* Base Reset & Typography */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  line-height: 1.6;
+  color: var(--color-ink);
+  background-color: var(--color-bg-primary);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-semibold);
+  line-height: 1.3;
+  margin-bottom: var(--space-4);
+}
+
+h1 { font-size: var(--text-4xl); }
+h2 { font-size: var(--text-3xl); }
+h3 { font-size: var(--text-2xl); }
+h4 { font-size: var(--text-xl); }
+h5 { font-size: var(--text-lg); }
+h6 { font-size: var(--text-base); }
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+
+/* Text Size Utilities */
+.text-xs { font-size: var(--text-xs); }
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-lg { font-size: var(--text-lg); }
+
+/* Manuscript Type Badge Classes */
+.badge-papyrus { background-color: var(--color-papyrus); }
+.badge-uncial { background-color: var(--color-uncial); }
+.badge-minuscule { background-color: var(--color-minuscule); }
+
+/* Text Type Classes */
+.text-alexandrian { color: var(--color-alexandrian); }
+.text-byzantine { color: var(--color-byzantine); }
+.text-western { color: var(--color-western); }
+.text-caesarean { color: var(--color-caesarean); }

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NT Manuscripts Timeline - Interactive Map Visualization</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../assets/design-system.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="header-left">
+        <img src="../assets/manuscript-icon.svg" alt="NT Manuscripts" class="header-icon">
+        <h1 class="app-title">NT Manuscripts Timeline</h1>
+        <span class="subtitle">Interactive Map Visualization | 0-1500 AD</span>
+      </div>
+
+      <div class="header-right">
+        <!-- Filter Controls -->
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="all">
+            <span class="filter-dot"></span>
+            All
+          </button>
+          <button class="filter-btn" data-filter="papyrus">
+            <span class="filter-dot papyrus"></span>
+            Papyri
+          </button>
+          <button class="filter-btn" data-filter="uncial">
+            <span class="filter-dot uncial"></span>
+            Uncials
+          </button>
+          <button class="filter-btn" data-filter="minuscule">
+            <span class="filter-dot minuscule"></span>
+            Minuscules
+          </button>
+        </div>
+
+        <!-- Info Button -->
+        <button class="icon-btn" id="infoBtn" aria-label="Information">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="app-main">
+
+    <!-- Map Container -->
+    <div id="map" class="map-container">
+      <!-- Map will be rendered here via Leaflet or similar -->
+      <div class="map-placeholder">
+        <p>Map visualization area</p>
+        <p class="map-hint">80% viewport height</p>
+      </div>
+
+      <!-- Stats Overlay (top-right) -->
+      <div class="stats-overlay">
+        <div class="stat-item">
+          <span class="stat-label">Year</span>
+          <span class="stat-value" id="currentYear">100</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Visible</span>
+          <span class="stat-value" id="visibleCount">12</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total</span>
+          <span class="stat-value">130</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Control Bar -->
+    <div class="timeline-bar">
+      <div class="timeline-content">
+
+        <!-- Play/Pause Button -->
+        <button class="play-btn" id="playBtn" aria-label="Play animation">
+          <svg class="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg class="pause-icon hidden" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+          </svg>
+        </button>
+
+        <!-- Timeline Slider Container -->
+        <div class="timeline-slider-container">
+          <div class="timeline-labels">
+            <span class="timeline-label">0 AD</span>
+            <span class="timeline-label">500 AD</span>
+            <span class="timeline-label">1000 AD</span>
+            <span class="timeline-label">1500 AD</span>
+          </div>
+
+          <!-- Range Slider -->
+          <input
+            type="range"
+            class="timeline-slider"
+            id="timelineSlider"
+            min="0"
+            max="1500"
+            value="100"
+            step="10"
+            aria-label="Timeline year"
+          >
+
+          <!-- Manuscript markers on timeline (visual indicators) -->
+          <div class="timeline-markers" id="timelineMarkers">
+            <!-- Generated dynamically based on manuscript dates -->
+          </div>
+        </div>
+
+        <!-- Speed Control -->
+        <div class="speed-control">
+          <button class="icon-btn" id="speedBtn" aria-label="Playback speed">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+            </svg>
+            <span class="speed-label">1x</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Manuscript Info Panel (slide-out) -->
+  <aside class="info-panel" id="infoPanel">
+    <div class="info-panel-header">
+      <h3 class="info-panel-title">Manuscript Details</h3>
+      <button class="close-btn" id="closePanelBtn" aria-label="Close panel">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="info-panel-content" id="panelContent">
+      <!-- Example content structure -->
+      <div class="manuscript-detail">
+        <div class="detail-header">
+          <span class="manuscript-id">P52</span>
+          <span class="manuscript-badge badge-papyrus">Papyrus</span>
+        </div>
+
+        <div class="detail-section">
+          <h4>Dating</h4>
+          <p class="date-range">~125-150 AD</p>
+        </div>
+
+        <div class="detail-section">
+          <h4>Location</h4>
+          <p>Oxyrhynchus, Egypt</p>
+        </div>
+
+        <div class="detail-section">
+          <h4>Contents</h4>
+          <p>Gospel of John (fragments)</p>
+        </div>
+
+        <div class="detail-section">
+          <h4>Text Type</h4>
+          <p class="text-alexandrian">Alexandrian</p>
+        </div>
+
+        <div class="detail-section">
+          <h4>Description</h4>
+          <p class="detail-description">
+            Oldest known fragment of the New Testament. Contains portions of John 18:31-33, 37-38.
+            Discovered in Egypt, now held at the John Rylands Library, Manchester.
+          </p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Manuscript Tooltip (hover popup) -->
+  <div class="manuscript-tooltip hidden" id="manuscriptTooltip">
+    <div class="tooltip-header">
+      <span class="tooltip-id">P52</span>
+      <span class="tooltip-year">~125 AD</span>
+    </div>
+    <p class="tooltip-content">Gospel of John</p>
+  </div>
+
+  <!-- Info Modal (about the project) -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>About NT Manuscripts Timeline</h2>
+        <button class="close-btn" id="closeModalBtn" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-content">
+        <p>
+          This interactive visualization displays the geographical distribution and chronological
+          timeline of New Testament manuscripts from 0 AD to 1500 AD.
+        </p>
+        <h3>How to Use</h3>
+        <ul>
+          <li>Use the timeline slider to navigate through different time periods</li>
+          <li>Click the play button to animate the manuscript discoveries over time</li>
+          <li>Filter by manuscript type (Papyri, Uncials, Minuscules)</li>
+          <li>Click on manuscript markers for detailed information</li>
+        </ul>
+        <h3>Data Sources</h3>
+        <p>Manuscript data compiled from CSNTM, Greek CNTR, NTVMR, and scholarly references.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+  <!-- Application JavaScript (ES6 Module) -->
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>
